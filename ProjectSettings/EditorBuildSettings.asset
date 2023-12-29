@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/TextScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/RockPaperScissors.unity
+    guid: 56071f1deacdc524196df9f0c86f1855
+  - enabled: 1
+    path: Assets/Scenes/TicTacToe.unity
+    guid: 86efc554a9059c540b7d1a5cfdbd9dba
   m_configObjects: {}

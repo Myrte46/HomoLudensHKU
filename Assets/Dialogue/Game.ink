@@ -1,3 +1,5 @@
+LIST Game = TicTacToe, RockPaperScissors
+
 -> Main
 
 === Main ===
@@ -51,7 +53,6 @@ Replay?
     -> END
     
 === home
-LIST Game = Tic_Tac_Toe, Rock_Paper_Scissors
 
 You get an Email, do you open it?
 + [Yes]
@@ -69,10 +70,10 @@ Do you want to play a game?
 = ChooseGame
 What game do you want to play?
 + Tic Tac Toe
-~ Game = Tic_Tac_Toe
+~ Game = TicTacToe
 -> replay
 + Rock Paper Scissors
-~ Game = Rock_Paper_Scissors
+~ Game = RockPaperScissors
 -> replay
 
 = passTime

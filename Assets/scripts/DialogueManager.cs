@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Ink.Runtime;
 using TMPro;
-using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
 
     [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextAsset inkJSON;
     [SerializeField] private GameObject[] buttonList;
@@ -18,14 +17,17 @@ public class DialogueManager : MonoBehaviour
     private static DialogueManager instance;
 
     private bool isChoiceActive = false;
+    public bool isGameActive = false;
 
     void Awake()
     {
+
         if (instance != null)
         {
             Debug.LogWarning("More than one instance of DialogueManager found!");
             return;
         }
+
         foreach (GameObject button in buttonList)
         {
             button.gameObject.SetActive(false);
@@ -48,10 +50,7 @@ public class DialogueManager : MonoBehaviour
         if (story.canContinue)
         {
             dialogueText.text += story.Continue();
-            do
-            {
-                ContinueStory();
-            } while (!isChoiceActive);
+            LoopOptions();
         }
     }
 
@@ -59,6 +58,27 @@ public class DialogueManager : MonoBehaviour
     {
         if (story.canContinue)
         {
+            Debug.Log(story.variablesState["Game"]);
+            if (story.variablesState["Game"] != null)
+            {
+                if (!story.variablesState["Game"].ToString().Equals(""))
+                {
+                    string game = story.variablesState["Game"].ToString();
+                    if (game.Equals("RockPaperScissors"))
+                    {
+                        StartRockPaperScissors();
+                    }
+                    else if (game.Equals("TicTacToe"))
+                    {
+                        StartTicTacToe();
+                    }
+                }
+            }
+            else
+            {
+                return;
+            }
+
             DisplayNextSentence();
         }
         else
@@ -88,8 +108,6 @@ public class DialogueManager : MonoBehaviour
                 buttonList[i].gameObject.SetActive(true);
                 buttonList[i].GetComponentInChildren<TextMeshProUGUI>().text = choice.text;
             }
-
-
         }
     }
 
@@ -108,17 +126,45 @@ public class DialogueManager : MonoBehaviour
         {
             button.gameObject.SetActive(false);
         }
+
         story.ChooseChoiceIndex(choiceIndex);
+
         isChoiceActive = false;
-        do
-        {
-            ContinueStory();
-        } while (!isChoiceActive);
+        LoopOptions();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ContinueStory();
+        }
+    }
+
+    void StartRockPaperScissors()
+    {
+        SceneManager.LoadScene("RockPaperScissors", LoadSceneMode.Additive);
+        gameObject.SetActive(false);
+        isGameActive = true;
+        object name = "";
+
+        story.variablesState["Game"] = name;
+    }
+
+    void StartTicTacToe()
+    {
+        SceneManager.LoadScene("TicTacToe", LoadSceneMode.Additive);
+        gameObject.SetActive(false);
+        isGameActive = true;
+        object name = "";
+
+        story.variablesState["Game"] = name;
+
+    }
+
+    public void LoopOptions()
+    {
+        while (!isChoiceActive && !isGameActive)
         {
             ContinueStory();
         }
