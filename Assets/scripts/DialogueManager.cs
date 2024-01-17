@@ -90,12 +90,16 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        string sentence = story.Continue();
+        if (story.variablesState["Replay"].ToString().Equals("ReplayTrue"))
+        {
+            dialogueText.text = "";
+        }
+        {string sentence = story.Continue();
         if (sentence.Equals(""))
         {
             EndDialogue();
         }
-        dialogueText.text += sentence;
+        dialogueText.text += sentence;}
     }
 
     public void DisplayChoices()
